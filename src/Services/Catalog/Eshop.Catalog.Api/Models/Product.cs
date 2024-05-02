@@ -1,16 +1,22 @@
-﻿namespace Catalog.Api.Models;
+﻿using Marten.Schema;
+using System.Text.Json.Serialization;
+
+namespace Catalog.Api.Models;
 
 public sealed class Product
 {
+    [Identity]
+    [JsonInclude]
     public Guid ProductId { get; private set; }
 
-    public string? Name;
+    public required string Name;
 
-    public List<string> Categories { get; private set; } = [];
-
-    public string? Description;
+    public required decimal Price;
 
     public string? ImageFile;
+    
+    public string? Description;
 
-    public decimal Price;
+    [JsonInclude]
+    public List<string> Categories { get; private set; } = [];
 }

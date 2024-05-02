@@ -1,3 +1,15 @@
-﻿namespace Eshop.Catalog.Api.Features.CreateProduct;
+﻿using System.Diagnostics.CodeAnalysis;
 
-public sealed record CreateProductCommandResult(Guid ProductId);
+namespace Eshop.Catalog.Api.Features.CreateProduct;
+
+public sealed class CreateProductCommandResult
+{
+    [SetsRequiredMembers]
+    public CreateProductCommandResult(Guid productId)
+    {
+        ProductId = productId;
+    }
+
+    public required Guid ProductId { get; init; }
+
+}

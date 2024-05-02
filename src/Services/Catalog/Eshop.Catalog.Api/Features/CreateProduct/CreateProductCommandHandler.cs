@@ -1,13 +1,27 @@
-﻿using Eshop.Common.Cqrs;
+﻿using Catalog.Api.Models;
+using Eshop.Common.Cqrs;
+using Mapster;
+using Marten;
 
 namespace Eshop.Catalog.Api.Features.CreateProduct;
 
 internal sealed class CreateProductCommandHandler : ICommandHandler<CreateProductCommand, CreateProductCommandResult>
 {
-    public Task<CreateProductCommandResult> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+    public CreateProductCommandHandler(IDocumentSession documentSession)
     {
-        var productId = Guid.NewGuid();
+        _documentSession = documentSession;
+    }
+    
+    private readonly IDocumentSession _documentSession;
 
-        return Task.FromResult<CreateProductCommandResult>(new(productId));
+    public async Task<CreateProductCommandResult> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+    {
+        var product = request.Adapt<Product>();
+
+        _documentSession.Store(product);
+
+        await _documentSession.SaveChangesAsync(cancellationToken);
+
+        return new(product.ProductId);
     }
 }
