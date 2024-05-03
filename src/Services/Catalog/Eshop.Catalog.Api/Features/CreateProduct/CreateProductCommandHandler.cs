@@ -14,9 +14,9 @@ internal sealed class CreateProductCommandHandler : ICommandHandler<CreateProduc
     
     private readonly IDocumentSession _documentSession;
 
-    public async Task<CreateProductCommandResult> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+    public async Task<CreateProductCommandResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
     {
-        var product = request.Adapt<Product>();
+        var product = command.Adapt<Product>();
 
         _documentSession.Store(product);
 

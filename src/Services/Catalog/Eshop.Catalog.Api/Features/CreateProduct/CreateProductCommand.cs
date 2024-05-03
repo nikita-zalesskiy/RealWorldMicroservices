@@ -2,7 +2,7 @@
 
 namespace Eshop.Catalog.Api.Features.CreateProduct;
 
-public sealed record CreateProductCommand : ICommand<CreateProductCommandResult>
+public sealed class CreateProductCommand : ICommand<CreateProductCommandResult>
 {
     public required string Name;
 

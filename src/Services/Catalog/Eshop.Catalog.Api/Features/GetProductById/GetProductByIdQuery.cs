@@ -8,6 +8,6 @@ public sealed class GetProductByIdQuery : IQuery<GetProductByIdQueryResult>
     {
         ProductId = productId;
     }
-    
-    public Guid ProductId { get; }
+
+    public readonly Guid ProductId;
 }

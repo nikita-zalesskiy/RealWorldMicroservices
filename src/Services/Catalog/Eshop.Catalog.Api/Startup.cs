@@ -1,6 +1,9 @@
-﻿using Marten;
+﻿using Eshop.Common.Carter;
+using Marten;
+using Microsoft.AspNetCore.Http.Json;
 using System.Reflection;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Eshop.Catalog.Api;
 
@@ -15,13 +18,25 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddCarter();
+        services.Configure<JsonOptions>(ConfigureJsonOptions);
+        
+        services.AddCarter(configurator: ConfigureCarter);
 
         services
             .AddMarten(ConfigureMarten)
             .UseLightweightSessions();
 
         services.AddMediatR(ConfigureMediatR);
+    }
+
+    private void ConfigureJsonOptions(JsonOptions options)
+    {
+        JsonSerializationConfigurator.Configure(options.SerializerOptions);
+    }
+
+    private void ConfigureCarter(CarterConfigurator configurator)
+    {
+        configurator.WithResponseNegotiator<JsonResponseNegotiator>();
     }
 
     private void ConfigureMarten(StoreOptions storeOptions)
@@ -35,7 +50,7 @@ public class Startup
 
         storeOptions.Connection(connectionString);
 
-        storeOptions.UseSystemTextJsonForSerialization(casing: Casing.SnakeCase);
+        storeOptions.UseSystemTextJsonForSerialization(casing: Casing.SnakeCase, configure: JsonSerializationConfigurator.Configure);
     }
 
     private static void ConfigureMediatR(MediatRServiceConfiguration configuration)

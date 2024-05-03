@@ -19,4 +19,11 @@ public sealed class Product
 
     [JsonInclude]
     public List<string> Categories { get; private set; } = [];
+
+    public void ReplaceCategories(IEnumerable<string> categories)
+    {
+        Categories.Clear();
+
+        Categories.AddRange(categories);
+    }
 }

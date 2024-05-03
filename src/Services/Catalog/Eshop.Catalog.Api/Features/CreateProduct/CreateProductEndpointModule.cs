@@ -14,7 +14,7 @@ public class CreateProductEndpointModule : ICarterModule
             .WithName("CreateProduct");
     }
 
-    private static async Task<IResult> CreateProduct([FromBody] CreateProductCommand createProductCommand, [FromServices] ISender sender)
+    private static async Task<IResult> CreateProduct(CreateProductCommand createProductCommand, [FromServices] ISender sender)
     {
         var response = await sender.Send(createProductCommand);
 

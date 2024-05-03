@@ -8,7 +8,6 @@ public sealed class GetProductByIdQueryResult
     {
         Product = product;
     }
-    
-    public Product? Product { get; }
 
+    public readonly Product? Product;
 }

@@ -6,22 +6,15 @@ namespace Eshop.Catalog.Api.Features.GetProducts;
 
 internal sealed class GetProductsQueryHandler : IQueryHandler<GetProductsQuery, GetProductsQueryResult>
 {
-    public GetProductsQueryHandler(
-        IDocumentSession documentSession
-        , ILogger<GetProductsQueryHandler> logger)
+    public GetProductsQueryHandler(IDocumentSession documentSession)
     {
-        _logger = logger;
-
         _documentSession = documentSession;
     }
     
     private readonly IDocumentSession _documentSession;
-    private readonly ILogger<GetProductsQueryHandler> _logger;
 
     public async Task<GetProductsQueryResult> Handle(GetProductsQuery query, CancellationToken cancellationToken)
     {
-        _logger.LogInformation($"{ nameof(GetProductsQueryHandler) }.{ nameof(Handle) } called with {{@Query}}", query);
-
         var products = await _documentSession
             .Query<Product>()
             .ToListAsync(cancellationToken);

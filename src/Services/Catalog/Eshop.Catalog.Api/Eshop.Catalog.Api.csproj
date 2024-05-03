@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\Eshop.Common.Carter\Eshop.Common.Carter.csproj" />
     <ProjectReference Include="..\..\..\Common\Eshop.Common.Cqrs\Eshop.Common.Cqrs.csproj" />
   </ItemGroup>
 
