@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Eshop.Common.Web.Functional;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Eshop.Catalog.Api.Features.CreateProduct;
 
@@ -14,10 +15,15 @@ public class CreateProductEndpointModule : ICarterModule
             .WithName("CreateProduct");
     }
 
-    private static async Task<IResult> CreateProduct(CreateProductCommand createProductCommand, [FromServices] ISender sender)
+    private static async Task<IResult> CreateProduct(CreateProductCommand command, [FromServices] ISender sender)
     {
-        var response = await sender.Send(createProductCommand);
+        var requestResult = await sender.Send(command);
 
-        return Results.Created($"/products/{ response.ProductId }", response);
+        return requestResult.ToHttpResult(GetCreateResponse);
+    }
+
+    private static IResult GetCreateResponse(CreateProductCommandResult commandResult)
+    {
+        return Results.Created($"/products/{ commandResult.ProductId }", commandResult);
     }
 }

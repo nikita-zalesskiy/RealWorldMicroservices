@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Eshop.Common.Web.Functional;
+using Eshop.Common.Web.Validation;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Eshop.Catalog.Api.Features.DeleteProduct;
 
@@ -16,8 +18,8 @@ public sealed class DeleteProductEndpointModule : ICarterModule
 
     private async Task<IResult> DeleteProduct(Guid productId, [FromServices] ISender sender)
     {
-        var response = await sender.Send(new DeleteProductCommand(productId));
+        var requestResult = await sender.Send(new DeleteProductCommand(productId));
 
-        return Results.Ok(response);
+        return requestResult.ToHttpResult(Results.Ok);
     }
 }

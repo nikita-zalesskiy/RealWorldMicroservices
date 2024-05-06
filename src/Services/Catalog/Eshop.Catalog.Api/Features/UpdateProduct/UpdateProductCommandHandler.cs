@@ -1,5 +1,6 @@
-﻿using Catalog.Api.Models;
+﻿using Catalog.Api.Domain;
 using Eshop.Common.Cqrs;
+using Eshop.Common.Web.Functional;
 using Marten;
 
 namespace Eshop.Catalog.Api.Features.UpdateProduct;
@@ -13,13 +14,14 @@ internal sealed class UpdateProductCommandHandler : ICommandHandler<UpdateProduc
 
     private readonly IDocumentSession _documentSession;
 
-    public async Task<UpdateProductCommandResult> Handle(UpdateProductCommand command, CancellationToken cancellationToken)
+    public async Task<RequestResult<UpdateProductCommandResult>> Handle(UpdateProductCommand command, CancellationToken cancellationToken)
     {
         var product = await _documentSession.LoadAsync<Product>(command.ProductId, cancellationToken);
 
         if (product is null)
         {
-            return new(isSucceeded: false);
+            return new UpdateProductCommandResult(isSucceeded: false)
+                .AsRequestResult();
         }
 
         if (command.Name is not null)
@@ -44,6 +46,7 @@ internal sealed class UpdateProductCommandHandler : ICommandHandler<UpdateProduc
 
         await _documentSession.SaveChangesAsync(cancellationToken);
 
-        return new(isSucceeded: true);
+        return new UpdateProductCommandResult(isSucceeded: true)
+            .AsRequestResult();
     }
 }

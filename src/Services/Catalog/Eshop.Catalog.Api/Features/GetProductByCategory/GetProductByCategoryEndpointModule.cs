@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Eshop.Common.Web.Functional;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Eshop.Catalog.Api.Features.GetProductByCategory;
 
@@ -16,8 +17,8 @@ public sealed class GetProductByCategoryEndpointModule : ICarterModule
 
     private async Task<IResult> GetProductByCategory(string category, [FromServices] ISender sender)
     {
-        var response = await sender.Send(new GetProductByCategoryQuery(category));
+        var requestResult = await sender.Send(new GetProductByCategoryQuery(category));
 
-        return Results.Ok(response);
+        return requestResult.ToHttpResult(Results.Ok);
     }
 }

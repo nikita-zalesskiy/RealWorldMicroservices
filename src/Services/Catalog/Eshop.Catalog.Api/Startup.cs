@@ -1,9 +1,9 @@
 ﻿using Eshop.Common.Carter;
+using Eshop.Common.Web.Validation;
+using FluentValidation;
 using Marten;
 using Microsoft.AspNetCore.Http.Json;
 using System.Reflection;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace Eshop.Catalog.Api;
 
@@ -19,7 +19,9 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.Configure<JsonOptions>(ConfigureJsonOptions);
-        
+
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
         services.AddCarter(configurator: ConfigureCarter);
 
         services
@@ -56,6 +58,8 @@ public class Startup
     private static void ConfigureMediatR(MediatRServiceConfiguration configuration)
     {
         configuration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+
+        configuration.AddOpenBehavior(typeof(ValidationBehavior<,>));
     }
 
     public void Configure(IApplicationBuilder applicationBuilder)

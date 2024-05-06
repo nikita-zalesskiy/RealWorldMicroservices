@@ -1,5 +1,6 @@
-﻿using Catalog.Api.Models;
+﻿using Catalog.Api.Domain;
 using Eshop.Common.Cqrs;
+using Eshop.Common.Web.Functional;
 using Mapster;
 using Marten;
 
@@ -14,7 +15,7 @@ internal sealed class CreateProductCommandHandler : ICommandHandler<CreateProduc
     
     private readonly IDocumentSession _documentSession;
 
-    public async Task<CreateProductCommandResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
+    public async Task<RequestResult<CreateProductCommandResult>> Handle(CreateProductCommand command, CancellationToken cancellationToken)
     {
         var product = command.Adapt<Product>();
 
@@ -22,6 +23,7 @@ internal sealed class CreateProductCommandHandler : ICommandHandler<CreateProduc
 
         await _documentSession.SaveChangesAsync(cancellationToken);
 
-        return new(product.ProductId);
+        return new CreateProductCommandResult(product.ProductId)
+            .AsRequestResult();
     }
 }

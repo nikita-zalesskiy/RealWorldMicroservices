@@ -1,7 +1,7 @@
 ﻿using Marten.Schema;
 using System.Text.Json.Serialization;
 
-namespace Catalog.Api.Models;
+namespace Catalog.Api.Domain;
 
 public sealed class Product
 {

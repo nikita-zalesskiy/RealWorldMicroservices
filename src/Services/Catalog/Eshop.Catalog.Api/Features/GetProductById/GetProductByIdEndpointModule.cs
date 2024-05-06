@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Eshop.Common.Web.Functional;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Eshop.Catalog.Api.Features.GetProductById;
 
@@ -16,8 +17,8 @@ public sealed class GetProductByIdEndpointModule : ICarterModule
 
     private async Task<IResult> GetProductById(Guid productId, [FromServices] ISender sender)
     {
-        var response = await sender.Send(new GetProductByIdQuery(productId));
+        var requestResult = await sender.Send(new GetProductByIdQuery(productId));
 
-        return Results.Ok(response);
+        return requestResult.ToHttpResult(Results.Ok);
     }
 }

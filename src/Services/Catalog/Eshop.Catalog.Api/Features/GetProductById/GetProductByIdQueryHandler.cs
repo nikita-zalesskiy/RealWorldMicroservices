@@ -1,5 +1,6 @@
-﻿using Catalog.Api.Models;
+﻿using Catalog.Api.Domain;
 using Eshop.Common.Cqrs;
+using Eshop.Common.Web.Functional;
 using Marten;
 
 namespace Eshop.Catalog.Api.Features.GetProductById;
@@ -13,11 +14,11 @@ public sealed class GetProductByIdQueryHandler : IQueryHandler<GetProductByIdQue
 
     private readonly IDocumentSession _documentSession;
 
-    public async Task<GetProductByIdQueryResult> Handle(GetProductByIdQuery query, CancellationToken cancellationToken)
+    public async Task<RequestResult<GetProductByIdQueryResult>> Handle(GetProductByIdQuery query, CancellationToken cancellationToken)
     {
         var product = await _documentSession.LoadAsync<Product>(query.ProductId, cancellationToken);
 
-        return new(product);
-
+        return new GetProductByIdQueryResult(product)
+            .AsRequestResult();
     }
 }

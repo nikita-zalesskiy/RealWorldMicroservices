@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Eshop.Common.Web.Functional;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Eshop.Catalog.Api.Features.UpdateProduct;
 
@@ -16,8 +17,8 @@ public sealed class UpdateProductEndpointModule : ICarterModule
 
     private async Task<IResult> UpdateProduct(UpdateProductCommand command, [FromServices] ISender sender)
     {
-        var response = await sender.Send(command);
+        var requestResult = await sender.Send(command);
 
-        return Results.Ok(response);
+        return requestResult.ToHttpResult(Results.Ok);
     }
 }

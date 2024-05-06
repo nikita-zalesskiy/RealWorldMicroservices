@@ -1,4 +1,4 @@
-﻿using Catalog.Api.Models;
+﻿using Catalog.Api.Domain;
 
 namespace Eshop.Catalog.Api.Features.GetProductById;
 
