@@ -1,4 +1,7 @@
-﻿using Eshop.Common.Carter;
+﻿using Autofac;
+using Eshop.Common.Carter;
+using Eshop.Common.Json;
+using Eshop.Common.Web.Functional;
 using Eshop.Common.Web.Validation;
 using FluentValidation;
 using Marten;
@@ -33,7 +36,13 @@ public class Startup
 
     private void ConfigureJsonOptions(JsonOptions options)
     {
-        JsonSerializationConfigurator.Configure(options.SerializerOptions);
+        var serializationOptions = options.SerializerOptions;
+
+        var jsonConverters = serializationOptions.Converters;
+
+        JsonSerializationConfigurator.Configure(serializationOptions);
+
+        jsonConverters.Add(new OptionJsonConverterFactory());
     }
 
     private void ConfigureCarter(CarterConfigurator configurator)
@@ -58,8 +67,11 @@ public class Startup
     private static void ConfigureMediatR(MediatRServiceConfiguration configuration)
     {
         configuration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+    }
 
-        configuration.AddOpenBehavior(typeof(ValidationBehavior<,>));
+    public void ConfigureContainer(ContainerBuilder builder)
+    {
+        builder.RegisterModule<ValidationModule>();
     }
 
     public void Configure(IApplicationBuilder applicationBuilder)

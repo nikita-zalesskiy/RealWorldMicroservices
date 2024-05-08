@@ -1,4 +1,5 @@
 ﻿using Eshop.Common.Cqrs;
+using Optional;
 
 namespace Eshop.Catalog.Api.Features.UpdateProduct;
 
@@ -6,13 +7,13 @@ public sealed class UpdateProductCommand : ICommand<UpdateProductCommandResult>
 {
     public Guid ProductId;
 
-    public string? Name;
+    public Option<string> Name;
 
-    public decimal? Price;
+    public Option<decimal> Price;
 
-    public string? ImageFile;
+    public Option<string> ImageFile;
 
-    public string? Description;
+    public Option<string?> Description;
 
-    public List<string>? Categories;
+    public Option<List<string>> Categories;
 }

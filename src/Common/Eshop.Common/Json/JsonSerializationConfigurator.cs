@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using System.Text.Json;
 
-namespace Eshop.Common.Carter;
+namespace Eshop.Common.Json;
 
 public static class JsonSerializationConfigurator
 {

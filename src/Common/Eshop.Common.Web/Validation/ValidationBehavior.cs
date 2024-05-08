@@ -3,6 +3,7 @@ using Eshop.Common.Web.Functional;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
+using Optional;
 
 namespace Eshop.Common.Web.Validation;
 

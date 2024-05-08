@@ -1,6 +1,8 @@
-﻿using Eshop.Common.Web.Validation;
+﻿using Eshop.Common.Functional;
+using Eshop.Common.Web.Validation;
 using Optional;
 using Optional.Unsafe;
+
 using System.Diagnostics.CodeAnalysis;
 
 namespace Eshop.Common.Web.Functional;
@@ -23,9 +25,7 @@ public sealed class RequestResult<TResult>
 
     public bool TryGetResult([NotNullWhen(returnValue: true)] out TResult? result)
     {
-        result = _result.ValueOrDefault();
-
-        return IsSucceeded;
+        return _result.TryGetValue(out result);
     }
 
     public TDestination Match<TDestination>(

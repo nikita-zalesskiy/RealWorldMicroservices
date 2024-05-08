@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore;
+using Autofac.Extensions.DependencyInjection;
 
 namespace Eshop.Catalog.Api;
 
@@ -6,10 +6,15 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        WebHost
-            .CreateDefaultBuilder(args)
-            .UseStartup<Startup>()
+        Host.CreateDefaultBuilder(args)
+            .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+            .ConfigureWebHostDefaults(ConfigureWebHost)
             .Build()
             .Run();
+    }
+
+    private static void ConfigureWebHost(IWebHostBuilder webHostBuilder)
+    {
+        webHostBuilder.UseStartup<Startup>();
     }
 }

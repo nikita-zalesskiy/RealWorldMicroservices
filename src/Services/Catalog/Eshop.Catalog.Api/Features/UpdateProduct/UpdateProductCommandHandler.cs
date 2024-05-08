@@ -24,23 +24,18 @@ internal sealed class UpdateProductCommandHandler : ICommandHandler<UpdateProduc
                 .AsRequestResult();
         }
 
-        if (command.Name is not null)
-        {
-            product.Name = command.Name;
-        }
 
-        if (command.Price is not null)
-        {
-            product.Price = command.Price.Value;
-        }
+        // AutoMapper.
+        
+        product.Name = command.Name.ValueOr(product.Name);
 
-        if (command.Categories is not null)
-        {
-            product.ReplaceCategories(command.Categories);
-        }
+        product.Price = command.Price.ValueOr(product.Price);
 
-        product.ImageFile = command.ImageFile;
-        product.Description = command.Description;
+        product.ImageFile = command.ImageFile.ValueOr(product.ImageFile);
+
+        product.Description = command.Description.ValueOr(product.Description);
+
+        product.Categories = command.Categories.ValueOr(product.Categories);
 
         _documentSession.Update(product);
 
