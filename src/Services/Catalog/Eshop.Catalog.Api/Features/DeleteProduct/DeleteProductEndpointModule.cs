@@ -1,5 +1,4 @@
 ﻿using Eshop.Common.Web.Functional;
-using Eshop.Common.Web.Validation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Eshop.Catalog.Api.Features.DeleteProduct;

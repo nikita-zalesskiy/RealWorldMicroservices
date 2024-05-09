@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace Eshop.Common.Web.Validation;
+namespace Eshop.Common.Web;
 
 public sealed class ValidationErrorCollection : IEnumerable<ValidationError>
 {

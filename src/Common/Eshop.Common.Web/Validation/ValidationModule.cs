@@ -1,16 +1,21 @@
 ﻿using Autofac;
 using Autofac.Core;
+using Eshop.Common.Cqrs;
 using Eshop.Common.Reflection;
 using Eshop.Common.Web.Functional;
 using MediatR;
 
-namespace Eshop.Common.Web.Validation;
+namespace Eshop.Common.Web;
 
 public sealed class ValidationModule : Module
 {
+    private static readonly Type s_commandType = typeof(ICommand<>);
+
     private static readonly Type s_requestResultType = typeof(RequestResult<>);
-    
+
     private static readonly Type s_validationBehaviorType = typeof(ValidationBehavior<,>);
+
+    private static readonly Type s_emptyPipelineBehaviorType = typeof(EmptyPipelineBehavior<,>);
 
     protected override void Load(ContainerBuilder builder)
     {
@@ -25,14 +30,25 @@ public sealed class ValidationModule : Module
     }
 
     private object GetValidationBehavior(IComponentContext context, Type[] types)
-    {
-        if (types is not [var requestType, var requestResultType]
-            || !requestResultType.IsClosedVersionOf(s_requestResultType)
-            || requestResultType.GetGenericArguments() is not [var responseType])
+    {   
+        if (types is not [var requestType, var requestResultType])
         {
             throw new DependencyResolutionException(message: nameof(GetValidationBehavior));
         }
 
-        return context.Resolve(s_validationBehaviorType.MakeGenericType(requestType, responseType));
+        Type behaviorType;
+
+        if (!requestResultType.IsClosedVersionOf(s_requestResultType)
+            || !requestType.IsAssignableToClosedVersionOf(s_commandType)
+            || requestResultType.GetGenericArguments() is not [var responseType])
+        {
+            behaviorType = s_emptyPipelineBehaviorType.MakeGenericType(requestType, requestResultType);
+
+            return Activator.CreateInstance(behaviorType)!;
+        }
+
+        behaviorType = s_validationBehaviorType.MakeGenericType(requestType, responseType);
+
+        return context.Resolve(behaviorType);
     }
 }

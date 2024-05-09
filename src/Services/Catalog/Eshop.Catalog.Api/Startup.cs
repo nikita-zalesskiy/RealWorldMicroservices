@@ -1,53 +1,35 @@
 ﻿using Autofac;
-using Eshop.Common.Carter;
 using Eshop.Common.Json;
-using Eshop.Common.Web.Functional;
-using Eshop.Common.Web.Validation;
+using Eshop.Common.Web;
 using FluentValidation;
 using Marten;
-using Microsoft.AspNetCore.Http.Json;
 using System.Reflection;
 
 namespace Eshop.Catalog.Api;
 
 public class Startup
 {
-    private readonly IConfiguration _configuration;
-
     public Startup(IConfiguration configuration)
     {
         _configuration = configuration;
     }
 
+    private readonly IConfiguration _configuration;
+    
+    private static readonly Assembly s_executingAssembly = Assembly.GetExecutingAssembly();
+
     public void ConfigureServices(IServiceCollection services)
     {
-        services.Configure<JsonOptions>(ConfigureJsonOptions);
+        services.AddWebCommon();
 
-        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+        services.AddValidatorsFromAssembly(s_executingAssembly);
 
-        services.AddCarter(configurator: ConfigureCarter);
-
-        services
-            .AddMarten(ConfigureMarten)
+        services.AddMarten(ConfigureMarten)
             .UseLightweightSessions();
 
         services.AddMediatR(ConfigureMediatR);
-    }
 
-    private void ConfigureJsonOptions(JsonOptions options)
-    {
-        var serializationOptions = options.SerializerOptions;
-
-        var jsonConverters = serializationOptions.Converters;
-
-        JsonSerializationConfigurator.Configure(serializationOptions);
-
-        jsonConverters.Add(new OptionJsonConverterFactory());
-    }
-
-    private void ConfigureCarter(CarterConfigurator configurator)
-    {
-        configurator.WithResponseNegotiator<JsonResponseNegotiator>();
+        services.AddAutoMapper(s_executingAssembly);
     }
 
     private void ConfigureMarten(StoreOptions storeOptions)
@@ -66,12 +48,12 @@ public class Startup
 
     private static void ConfigureMediatR(MediatRServiceConfiguration configuration)
     {
-        configuration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+        configuration.RegisterServicesFromAssembly(s_executingAssembly);
     }
 
     public void ConfigureContainer(ContainerBuilder builder)
     {
-        builder.RegisterModule<ValidationModule>();
+        builder.ConfigureWebCommon();
     }
 
     public void Configure(IApplicationBuilder applicationBuilder)

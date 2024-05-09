@@ -1,4 +1,5 @@
-﻿using Catalog.Api.Domain;
+﻿using AutoMapper;
+using Catalog.Api.Domain;
 using Eshop.Common.Cqrs;
 using Eshop.Common.Web.Functional;
 using Marten;
@@ -7,10 +8,15 @@ namespace Eshop.Catalog.Api.Features.UpdateProduct;
 
 internal sealed class UpdateProductCommandHandler : ICommandHandler<UpdateProductCommand, UpdateProductCommandResult>
 {
-    public UpdateProductCommandHandler(IDocumentSession documentSession)
+    public UpdateProductCommandHandler(IMapper mapper
+        , IDocumentSession documentSession)
     {
+        _mapper = mapper;
+
         _documentSession = documentSession;
     }
+
+    private readonly IMapper _mapper;
 
     private readonly IDocumentSession _documentSession;
 
@@ -24,18 +30,7 @@ internal sealed class UpdateProductCommandHandler : ICommandHandler<UpdateProduc
                 .AsRequestResult();
         }
 
-
-        // AutoMapper.
-        
-        product.Name = command.Name.ValueOr(product.Name);
-
-        product.Price = command.Price.ValueOr(product.Price);
-
-        product.ImageFile = command.ImageFile.ValueOr(product.ImageFile);
-
-        product.Description = command.Description.ValueOr(product.Description);
-
-        product.Categories = command.Categories.ValueOr(product.Categories);
+        _mapper.Map(command, product);
 
         _documentSession.Update(product);
 

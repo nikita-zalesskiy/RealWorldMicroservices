@@ -1,5 +1,4 @@
-﻿using Eshop.Common.Web.Validation;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace Eshop.Common.Web.Functional;
 

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Net.Http.Headers;
 using System.Text.Json;
 
-namespace Eshop.Common.Carter;
+namespace Eshop.Common.Web.Carter;
 
 public sealed class JsonResponseNegotiator : IResponseNegotiator
 {

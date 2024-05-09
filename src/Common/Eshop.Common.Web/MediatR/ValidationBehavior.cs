@@ -3,9 +3,8 @@ using Eshop.Common.Web.Functional;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
-using Optional;
 
-namespace Eshop.Common.Web.Validation;
+namespace Eshop.Common.Web;
 
 public sealed class ValidationBehavior<TRequest, TResponse>
     : IPipelineBehavior<TRequest, RequestResult<TResponse>>

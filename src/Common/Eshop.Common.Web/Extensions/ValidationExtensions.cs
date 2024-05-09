@@ -1,7 +1,7 @@
 ﻿using FluentValidation.Validators;
 using FluentValidation;
 
-namespace Eshop.Common.Web.Validation;
+namespace Eshop.Common.Web;
 
 public static class ValidationExtensions
 {
