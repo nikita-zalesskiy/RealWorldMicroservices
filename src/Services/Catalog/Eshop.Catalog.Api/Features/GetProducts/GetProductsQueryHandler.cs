@@ -20,7 +20,8 @@ internal sealed class GetProductsQueryHandler : IQueryHandler<GetProductsQuery, 
             .Query<Product>()
             .ToListAsync(cancellationToken);
 
-        return new GetProductsQueryResult(products)
-            .AsRequestResult();
+        var queryResult = new GetProductsQueryResult(products);
+
+        return queryResult.AsRequestResult();
     }
 }

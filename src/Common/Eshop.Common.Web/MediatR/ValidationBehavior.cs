@@ -8,7 +8,7 @@ namespace Eshop.Common.Web;
 
 public sealed class ValidationBehavior<TRequest, TResponse>
     : IPipelineBehavior<TRequest, RequestResult<TResponse>>
-    where TRequest : ICommand<TResponse>
+    where TRequest : IRequest<TResponse>
 {
     public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
     {

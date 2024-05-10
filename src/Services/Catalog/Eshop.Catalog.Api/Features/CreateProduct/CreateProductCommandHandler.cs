@@ -23,7 +23,8 @@ internal sealed class CreateProductCommandHandler : ICommandHandler<CreateProduc
 
         await _documentSession.SaveChangesAsync(cancellationToken);
 
-        return new CreateProductCommandResult(product.ProductId)
-            .AsRequestResult();
+        var commandResult = new CreateProductCommandResult(product.ProductId);
+
+        return commandResult.AsRequestResult();
     }
 }

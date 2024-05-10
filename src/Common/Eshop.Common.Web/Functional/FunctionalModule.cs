@@ -8,10 +8,10 @@ public sealed class FunctionalModule : Module
     {
         base.Load(builder);
 
-        RegisterOptionalDependencies(builder);
+        RegisterOptionDependencies(builder);
     }
 
-    private static void RegisterOptionalDependencies(ContainerBuilder builder)
+    private static void RegisterOptionDependencies(ContainerBuilder builder)
     {
         builder.RegisterGeneric(typeof(OptionValueConverter<,>));
     }

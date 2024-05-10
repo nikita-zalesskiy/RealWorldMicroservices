@@ -21,7 +21,8 @@ internal sealed class DeleteProductCommandHandler : ICommandHandler<DeleteProduc
 
         await _documentSession.SaveChangesAsync(cancellationToken);
 
-        return new DeleteProductCommandResult(isSucceeded: true)
-            .AsRequestResult();
+        var commandResult = new DeleteProductCommandResult(isSucceeded: true);
+
+        return commandResult.AsRequestResult();
     }
 }

@@ -5,6 +5,7 @@ using Eshop.Common.Web.Carter;
 using Eshop.Common.Web.Functional;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace Eshop.Common.Web;
 
@@ -12,6 +13,8 @@ public static class ConfigureExtensions
 {
     public static void AddWebCommon(this IServiceCollection services)
     {
+        var assembly = Assembly.GetCallingAssembly();
+
         services.Configure<JsonOptions>(ConfigureJsonOptions);
 
         services.AddCarter(configurator: ConfigureCarter);
@@ -30,6 +33,8 @@ public static class ConfigureExtensions
 
     private static void ConfigureCarter(CarterConfigurator configurator)
     {
+        configurator.WithEmptyValidators();
+
         configurator.WithResponseNegotiator<JsonResponseNegotiator>();
     }
 

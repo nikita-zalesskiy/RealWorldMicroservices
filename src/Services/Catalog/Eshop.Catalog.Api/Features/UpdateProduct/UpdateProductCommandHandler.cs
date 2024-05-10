@@ -22,12 +22,15 @@ internal sealed class UpdateProductCommandHandler : ICommandHandler<UpdateProduc
 
     public async Task<RequestResult<UpdateProductCommandResult>> Handle(UpdateProductCommand command, CancellationToken cancellationToken)
     {
+        UpdateProductCommandResult commandResult;
+
         var product = await _documentSession.LoadAsync<Product>(command.ProductId, cancellationToken);
 
         if (product is null)
         {
-            return new UpdateProductCommandResult(isSucceeded: false)
-                .AsRequestResult();
+            commandResult = new UpdateProductCommandResult(isSucceeded: false);
+
+            return commandResult.AsRequestResult();
         }
 
         _mapper.Map(command, product);
@@ -36,7 +39,8 @@ internal sealed class UpdateProductCommandHandler : ICommandHandler<UpdateProduc
 
         await _documentSession.SaveChangesAsync(cancellationToken);
 
-        return new UpdateProductCommandResult(isSucceeded: true)
-            .AsRequestResult();
+        commandResult = new UpdateProductCommandResult(isSucceeded: true);
+
+        return commandResult.AsRequestResult();
     }
 }
