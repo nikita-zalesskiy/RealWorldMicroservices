@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Core;
+using Eshop.Common.Cqrs;
 using Eshop.Common.Reflection;
 using Eshop.Common.Web.Functional;
 using MediatR;
@@ -8,7 +9,7 @@ namespace Eshop.Common.Web;
 
 public sealed class ValidationModule : Module
 {
-    private static readonly Type s_requestType = typeof(IRequest<>);
+    private static readonly Type s_commandType = typeof(ICommand<>);
 
     private static readonly Type s_requestResultType = typeof(RequestResult<>);
 
@@ -38,7 +39,6 @@ public sealed class ValidationModule : Module
         Type behaviorType;
 
         if (!requestResultType.IsClosedVersionOf(s_requestResultType)
-            || !requestType.IsAssignableToClosedVersionOf(s_requestType)
             || requestResultType.GetGenericArguments() is not [var responseType])
         {
             behaviorType = s_emptyPipelineBehaviorType.MakeGenericType(requestType, requestResultType);

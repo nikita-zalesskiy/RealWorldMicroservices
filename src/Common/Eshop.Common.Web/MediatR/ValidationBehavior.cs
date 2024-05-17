@@ -1,5 +1,4 @@
-﻿using Eshop.Common.Cqrs;
-using Eshop.Common.Web.Functional;
+﻿using Eshop.Common.Web.Functional;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
@@ -8,7 +7,7 @@ namespace Eshop.Common.Web;
 
 public sealed class ValidationBehavior<TRequest, TResponse>
     : IPipelineBehavior<TRequest, RequestResult<TResponse>>
-    where TRequest : IRequest<TResponse>
+    where TRequest : notnull
 {
     public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
     {

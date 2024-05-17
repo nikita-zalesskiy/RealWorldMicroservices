@@ -3,7 +3,8 @@ using MediatR;
 
 namespace Eshop.Common.Cqrs;
 
-public interface IQueryHandler<in TQuery> : IRequestHandler<TQuery>
+public interface IQueryHandler<in TQuery>
+    : IRequestHandler<TQuery, RequestResult<Unit>>
     where TQuery : IQuery;
 
 public interface IQueryHandler<in TQuery, TResponse>

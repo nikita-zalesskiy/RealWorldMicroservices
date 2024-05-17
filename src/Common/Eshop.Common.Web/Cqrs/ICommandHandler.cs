@@ -4,7 +4,7 @@ using MediatR;
 namespace Eshop.Common.Cqrs;
 
 public interface ICommandHandler<in TCommand>
-    : IRequestHandler<TCommand>
+    : IRequestHandler<TCommand, RequestResult<Unit>>
     where TCommand : ICommand;
 
 public interface ICommandHandler<in TCommand, TResponse>
