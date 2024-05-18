@@ -1,5 +1,4 @@
-﻿using Eshop.Catalog.Api.Features.CreateProduct;
-using Eshop.Common.Web.Functional;
+﻿using Eshop.Common.Web.Functional;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Eshop.Catalog.Api.Features.GetProducts;
@@ -16,9 +15,9 @@ public sealed class GetProductEndpointModule : ICarterModule
             .WithName("GetProducts");
     }
 
-    private async Task<IResult> GetProducts([FromServices] ISender sender)
+    private async Task<IResult> GetProducts([AsParameters] GetProductsQuery query, [FromServices] ISender sender)
     {
-        var requestResult = await sender.Send(new GetProductsQuery());
+        var requestResult = await sender.Send(query);
 
         return requestResult.ToHttpResult(Results.Ok);
     }

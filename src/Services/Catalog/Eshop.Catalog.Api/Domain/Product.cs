@@ -5,6 +5,19 @@ namespace Catalog.Api.Domain;
 
 public sealed class Product
 {
+    public Product()
+    {
+        
+    }
+
+    /// <remarks>
+    /// For data seeding purposes.
+    /// </remarks>
+    internal Product(Guid productId)
+    {
+        ProductId = productId;
+    }
+
     [Identity]
     [JsonInclude]
     public Guid ProductId { get; private set; }

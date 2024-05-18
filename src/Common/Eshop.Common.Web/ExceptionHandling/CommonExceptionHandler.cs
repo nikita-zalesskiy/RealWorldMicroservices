@@ -16,6 +16,7 @@ public sealed class CommonExceptionHandler : IExceptionHandler
         {
             Status = StatusCodes.Status500InternalServerError
             , Instance = request.Path
+            , Detail = exception.Message
             , Extensions =
             {
                 { "trace_id", httpContext.TraceIdentifier }

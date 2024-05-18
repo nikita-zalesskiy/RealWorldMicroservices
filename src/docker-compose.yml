@@ -4,5 +4,11 @@ services:
   eshop.catalog.database:
     image: postgres
 
+  eshop.catalog.api:
+    image: ${DOCKER_REGISTRY-}eshopcatalogapi
+    build:
+      context: .
+      dockerfile: Services/Catalog/Eshop.Catalog.Api/Dockerfile
+
 volumes:
   postgres_catalog:

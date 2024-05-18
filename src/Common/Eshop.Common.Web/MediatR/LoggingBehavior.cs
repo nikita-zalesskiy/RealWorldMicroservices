@@ -15,7 +15,7 @@ public sealed class LoggingBehavior<TRequest, TResponse>
 
     private readonly ILogger<LoggingBehavior<TRequest, TResponse>> _logger;
 
-    private static readonly long s_loggingThreshold = 50;
+    private static readonly long s_loggingThreshold = 100;
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
