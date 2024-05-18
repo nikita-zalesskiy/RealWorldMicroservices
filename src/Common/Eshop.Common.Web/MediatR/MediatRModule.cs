@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Eshop.Common.Web;
 
-public sealed class ValidationModule : Module
+public sealed class MediatRModule : Module
 {
     private static readonly Type s_commandType = typeof(ICommand<>);
 
@@ -27,6 +27,9 @@ public sealed class ValidationModule : Module
         builder.RegisterGeneric(GetValidationBehavior)
             .As(typeof(IPipelineBehavior<,>))
             .InstancePerDependency();
+        
+        builder.RegisterGeneric(typeof(LoggingBehavior<,>))
+            .As(typeof(IPipelineBehavior<,>));
     }
 
     private object GetValidationBehavior(IComponentContext context, Type[] types)

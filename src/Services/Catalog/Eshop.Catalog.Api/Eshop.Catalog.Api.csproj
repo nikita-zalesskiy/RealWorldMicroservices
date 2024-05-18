@@ -19,10 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Validation\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\..\Common\Eshop.Common.Web\Eshop.Common.Web.csproj" />
   </ItemGroup>
 

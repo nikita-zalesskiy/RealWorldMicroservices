@@ -22,14 +22,8 @@ public class Startup
     {
         services.AddWebCommon();
 
-        services.AddValidatorsFromAssembly(s_executingAssembly);
-
         services.AddMarten(ConfigureMarten)
             .UseLightweightSessions();
-
-        services.AddMediatR(ConfigureMediatR);
-
-        services.AddAutoMapper(s_executingAssembly);
     }
 
     private void ConfigureMarten(StoreOptions storeOptions)
@@ -46,11 +40,6 @@ public class Startup
         storeOptions.UseSystemTextJsonForSerialization(casing: Casing.SnakeCase, configure: JsonSerializationConfigurator.Configure);
     }
 
-    private static void ConfigureMediatR(MediatRServiceConfiguration configuration)
-    {
-        configuration.RegisterServicesFromAssembly(s_executingAssembly);
-    }
-
     public void ConfigureContainer(ContainerBuilder builder)
     {
         builder.ConfigureWebCommon();
@@ -58,13 +47,6 @@ public class Startup
 
     public void Configure(IApplicationBuilder applicationBuilder)
     {
-        applicationBuilder.UseRouting();
-
-        applicationBuilder.UseEndpoints(ConfigureEndpoints);
-    }
-
-    private static void ConfigureEndpoints(IEndpointRouteBuilder endpointRouteBuilder)
-    {
-        endpointRouteBuilder.MapCarter();
+        applicationBuilder.UseWebCommon();
     }
 }

@@ -14,7 +14,8 @@ public class FunctionalValidator<TSource> : AbstractValidator<TSource>
     {
         ArgumentNullException.ThrowIfNull(optionExpression);
 
-        var propertyExpression = ExpressionTransformer.Combine(optionExpression, option => option.ValueOrDefault());
+        var propertyExpression = ExpressionTransformer
+            .Combine(optionExpression, option => option.ValueOrDefault());
 
         var hasValueFunction = ExpressionTransformer
             .Combine(optionExpression, option => option.HasValue)
