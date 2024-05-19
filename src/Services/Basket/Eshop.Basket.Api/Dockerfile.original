@@ -10,9 +10,6 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Services/Basket/Eshop.Basket.Api/Eshop.Basket.Api.csproj", "Services/Basket/Eshop.Basket.Api/"]
-COPY ["Common/Eshop.Common.Web/Eshop.Common.Web.csproj", "Common/Eshop.Common.Web/"]
-COPY ["Common/Eshop.Common.Functional/Eshop.Common.Functional.csproj", "Common/Eshop.Common.Functional/"]
-COPY ["Common/Eshop.Common/Eshop.Common.csproj", "Common/Eshop.Common/"]
 RUN dotnet restore "./Services/Basket/Eshop.Basket.Api/Eshop.Basket.Api.csproj"
 COPY . .
 WORKDIR "/src/Services/Basket/Eshop.Basket.Api"

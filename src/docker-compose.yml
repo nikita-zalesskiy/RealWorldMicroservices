@@ -1,5 +1,3 @@
-version: '3.4'
-
 services:
   eshop.catalog.database:
     image: postgres
@@ -9,6 +7,20 @@ services:
     build:
       context: .
       dockerfile: Services/Catalog/Eshop.Catalog.Api/Dockerfile
+  
+  eshop.basket.database:
+    image: postgres
+  
+  eshop.basket.cache:
+    image: redis
+
+  eshop.basket.api:
+    image: ${DOCKER_REGISTRY-}eshopbasketapi
+    build:
+      context: .
+      dockerfile: Services/Basket/Eshop.Basket.Api/Dockerfile
 
 volumes:
-  postgres_catalog:
+  postgres.catalog:
+  postgres.basket:
+

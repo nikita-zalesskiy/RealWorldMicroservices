@@ -9,10 +9,7 @@ public sealed class DeleteProductEndpointModule : ICarterModule
     {
         app.MapDelete("/products/{productId}", DeleteProduct)
             .Produces<DeleteProductCommandResult>(StatusCodes.Status200OK)
-            .ProducesProblem(StatusCodes.Status400BadRequest)
-            .WithDescription("Delete Product")
-            .WithSummary("Delete Product")
-            .WithName("DeleteProduct");
+            .ProducesProblem(StatusCodes.Status400BadRequest);
     }
 
     private async Task<IResult> DeleteProduct(Guid productId, [FromServices] ISender sender)

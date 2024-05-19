@@ -9,15 +9,14 @@ public sealed class GetProductByCategoryEndpointModule : ICarterModule
     {
         app.MapGet("/products/category/{category}", GetProductByCategory)
             .Produces<GetProductByCategoryQueryResult>(StatusCodes.Status200OK)
-            .ProducesProblem(StatusCodes.Status400BadRequest)
-            .WithDescription("Get Product By Category")
-            .WithSummary("Get Product By Category")
-            .WithName("GetProductByCategory");
+            .ProducesProblem(StatusCodes.Status400BadRequest);
     }
 
     private async Task<IResult> GetProductByCategory(string category, [FromServices] ISender sender)
     {
-        var requestResult = await sender.Send(new GetProductByCategoryQuery(category));
+        var query = new GetProductByCategoryQuery(category);
+
+        var requestResult = await sender.Send(query);
 
         return requestResult.ToHttpResult(Results.Ok);
     }

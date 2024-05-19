@@ -9,15 +9,14 @@ public sealed class GetProductByIdEndpointModule : ICarterModule
     {
         app.MapGet("/products/{productId}", GetProductById)
             .Produces<GetProductByIdQueryResult>(StatusCodes.Status200OK)
-            .ProducesProblem(StatusCodes.Status400BadRequest)
-            .WithDescription("Get Product By Id")
-            .WithSummary("Get Product By Id")
-            .WithName("GetProductById");
+            .ProducesProblem(StatusCodes.Status400BadRequest);
     }
 
     private async Task<IResult> GetProductById(Guid productId, [FromServices] ISender sender)
     {
-        var requestResult = await sender.Send(new GetProductByIdQuery(productId));
+        var query = new GetProductByIdQuery(productId);
+
+        var requestResult = await sender.Send(query);
 
         return requestResult.ToHttpResult(Results.Ok);
     }

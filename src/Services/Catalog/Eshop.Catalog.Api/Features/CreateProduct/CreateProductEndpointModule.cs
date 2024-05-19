@@ -9,10 +9,7 @@ public class CreateProductEndpointModule : ICarterModule
     {
         app.MapPost("/products", CreateProduct)
             .Produces<CreateProductCommandResult>(StatusCodes.Status201Created)
-            .ProducesProblem(StatusCodes.Status400BadRequest)
-            .WithDescription("Create Product")
-            .WithSummary("Create Product")
-            .WithName("CreateProduct");
+            .ProducesProblem(StatusCodes.Status400BadRequest);
     }
 
     private static async Task<IResult> CreateProduct(CreateProductCommand command, [FromServices] ISender sender)

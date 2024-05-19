@@ -1,7 +1,5 @@
 ﻿using Eshop.Common.Functional;
 using Optional;
-using Optional.Unsafe;
-
 using System.Diagnostics.CodeAnalysis;
 
 namespace Eshop.Common.Web.Functional;

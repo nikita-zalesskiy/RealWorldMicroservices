@@ -9,10 +9,7 @@ public sealed class UpdateProductEndpointModule : ICarterModule
     {
         app.MapPut("/products", UpdateProduct)
             .Produces<UpdateProductCommandResult>(StatusCodes.Status200OK)
-            .ProducesProblem(StatusCodes.Status400BadRequest)
-            .WithDescription("Update Product")
-            .WithSummary("Update Product")
-            .WithName("UpdateProduct");
+            .ProducesProblem(StatusCodes.Status400BadRequest);
     }
 
     private async Task<IResult> UpdateProduct(UpdateProductCommand command, [FromServices] ISender sender)

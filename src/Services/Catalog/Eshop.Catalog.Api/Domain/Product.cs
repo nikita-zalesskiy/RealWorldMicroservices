@@ -18,7 +18,6 @@ public sealed class Product
         ProductId = productId;
     }
 
-    [Identity]
     [JsonInclude]
     public Guid ProductId { get; private set; }
 

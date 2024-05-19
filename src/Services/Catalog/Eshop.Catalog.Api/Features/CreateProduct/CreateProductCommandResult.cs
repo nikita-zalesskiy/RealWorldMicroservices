@@ -8,5 +8,4 @@ public sealed class CreateProductCommandResult
     }
 
     public readonly Guid ProductId;
-
 }

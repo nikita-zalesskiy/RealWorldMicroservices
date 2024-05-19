@@ -2,7 +2,7 @@
 using Marten;
 using Marten.Schema;
 
-namespace Eshop.Catalog.Api.DataSeeds;
+namespace Eshop.Catalog.Api.Persistence;
 
 public sealed class ProductDataSeed : IInitialData
 {
@@ -19,9 +19,9 @@ public sealed class ProductDataSeed : IInitialData
             return;
         }
 
-        var prodcuts = GetProducts();
+        var products = GetProducts();
 
-        session.Store(prodcuts);
+        session.Store(products);
 
         await session.SaveChangesAsync(cancellation);
     }

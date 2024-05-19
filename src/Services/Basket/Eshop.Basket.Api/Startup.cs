@@ -1,32 +1,31 @@
 ﻿using Autofac;
-using Catalog.Api.Domain;
-using Eshop.Catalog.Api.Persistence;
+using Eshop.Basket.Api.Domain;
+using Eshop.Basket.Api.Persistence;
 using Eshop.Common.Json;
 using Eshop.Common.Web;
 using HealthChecks.UI.Client;
 using Marten;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Caching.StackExchangeRedis;
 
-namespace Eshop.Catalog.Api;
+namespace Eshop.Basket.Api;
 
 public class Startup
 {
-    public Startup(
-        IConfiguration configuration
-        , IWebHostEnvironment webHostEnvironment)
+    public Startup(IConfiguration configuration)
     {
         _configuration = configuration;
-        
-        _webHostEnvironment = webHostEnvironment;
 
-        _connectionString = GetConnectionString("Eshop");
+        _redisConnectionString = GetConnectionString("Redis");
+        
+        _postgreConnectionString = GetConnectionString("Eshop");
     }
 
-    private readonly IConfiguration _configuration;
+    private readonly string _redisConnectionString;
 
-    private readonly string _connectionString;
-    
-    private readonly IWebHostEnvironment _webHostEnvironment;
+    private readonly string _postgreConnectionString;
+
+    private readonly IConfiguration _configuration;
 
     public void ConfigureServices(IServiceCollection services)
     {
@@ -35,33 +34,40 @@ public class Startup
         services.AddMarten(ConfigureMarten)
             .UseLightweightSessions();
 
-        if (_webHostEnvironment.IsDevelopment())
-        {
-            services.InitializeMartenWith<ProductDataSeed>();
-        }
+        services.AddStackExchangeRedisCache(ConfigureRedis);
 
         services.AddHealthChecks()
-            .AddNpgSql(_connectionString);
+            .AddRedis(_redisConnectionString)
+            .AddNpgSql(_postgreConnectionString);
     }
 
     private void ConfigureMarten(StoreOptions storeOptions)
     {
-        storeOptions.Connection(_connectionString);
+        storeOptions.Connection(_postgreConnectionString);
 
         storeOptions.UseSystemTextJsonForSerialization(casing: Casing.SnakeCase, configure: JsonSerializationConfigurator.Configure);
-
+        
         ConfigureMartenSchema(storeOptions.Schema);
     }
 
     private static void ConfigureMartenSchema(MartenRegistry schema)
     {
-        schema.For<Product>()
-            .Identity(product => product.ProductId);
+        schema.For<ShoppingCart>()
+            .Identity(shoppingCart => shoppingCart.UserId);
+    }
+
+    private void ConfigureRedis(RedisCacheOptions options)
+    {
+        var connectionString = GetConnectionString("Redis");
+
+        options.Configuration = connectionString;
     }
 
     public void ConfigureContainer(ContainerBuilder builder)
     {
         builder.ConfigureWebCommon();
+
+        builder.RegisterModule<PersistenceModule>();
     }
 
     public void Configure(IApplicationBuilder applicationBuilder)

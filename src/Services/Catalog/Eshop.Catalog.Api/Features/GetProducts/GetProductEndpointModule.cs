@@ -9,10 +9,7 @@ public sealed class GetProductEndpointModule : ICarterModule
     {
         app.MapGet("/products", GetProducts)
             .Produces<GetProductsQueryResult>(StatusCodes.Status200OK)
-            .ProducesProblem(StatusCodes.Status400BadRequest)
-            .WithDescription("Get Products")
-            .WithSummary("Get Products")
-            .WithName("GetProducts");
+            .ProducesProblem(StatusCodes.Status400BadRequest);
     }
 
     private async Task<IResult> GetProducts([AsParameters] GetProductsQuery query, [FromServices] ISender sender)

@@ -1,12 +1,20 @@
+using Autofac.Extensions.DependencyInjection;
+
 namespace Eshop.Basket.Api;
 
 public class Program
 {
     public static void Main(string[] args)
     {
-        var builder = WebApplication.CreateBuilder(args);
-        var app = builder.Build();
+        Host.CreateDefaultBuilder(args)
+            .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+            .ConfigureWebHostDefaults(ConfigureWebHost)
+            .Build()
+            .Run();
+    }
 
-        app.Run();
+    private static void ConfigureWebHost(IWebHostBuilder webHostBuilder)
+    {
+        webHostBuilder.UseStartup<Startup>();
     }
 }
