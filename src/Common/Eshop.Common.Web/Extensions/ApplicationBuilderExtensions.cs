@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Routing;
 
 namespace Eshop.Common.Web;
 
-public static class MiddlewareExtensions
+public static class ApplicationBuilderExtensions
 {
     public static void UseWebCommon(this IApplicationBuilder applicationBuilder)
     {

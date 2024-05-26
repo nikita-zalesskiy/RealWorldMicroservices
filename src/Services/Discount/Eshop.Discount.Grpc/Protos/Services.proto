@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package Services;
+
+option csharp_namespace = "Eshop.Discount.Grpc";
+
+import "Messages.proto";
+
+service DiscountProtoService
+{
+	rpc GetDiscount (Messages.GetDiscountRequest) returns (Messages.GetDiscountResponse);
+	rpc CreateDiscount (Messages.CreateDiscountRequest) returns (Messages.CreateDiscountResponse);
+	rpc UpdateDiscount (Messages.UpdateDiscountRequest) returns (Messages.UpdateDiscountResponse);
+	rpc DeleteDiscount (Messages.DeleteDiscountRequest) returns (Messages.DeleteDiscountResponse);
+}

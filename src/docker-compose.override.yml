@@ -44,19 +44,37 @@ services:
     restart: always
     ports:
       - "6379:6379"
+
   eshop.basket.api:
+    container_name: eshop.basket.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
       - ConnectionStrings__Eshop=Server=eshop.basket.database;Port=5433;Database=Eshop.Basket;User Id=postgres;Password=postgres;Include Error Detail=true
       - ConnectionStrings__Redis=Server=eshop.basket.cache:6379
+      - GrpcSettings__DiscountUri=https://eshop.discount.grpc:8081
     depends_on:
       - eshop.basket.database
       - eshop.basket.cache
+      - eshop.discount.grpc 
     ports:
       - "6001:8080"
       - "6061:8081"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+  eshop.discount.grpc:
+    container_name: eshop.discount.grpc
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__Eshop=Data Source=DbDiscount
+    ports:
+      - "6002:8080"
+      - "6062:8081"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro

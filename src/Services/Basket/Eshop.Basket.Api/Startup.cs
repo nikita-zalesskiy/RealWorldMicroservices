@@ -1,8 +1,11 @@
 ﻿using Autofac;
 using Eshop.Basket.Api.Domain;
 using Eshop.Basket.Api.Persistence;
+using Eshop.Basket.Api.Services;
 using Eshop.Common.Json;
 using Eshop.Common.Web;
+using Eshop.Discount.Grpc;
+using Grpc.Net.ClientFactory;
 using HealthChecks.UI.Client;
 using Marten;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -10,15 +13,17 @@ using Microsoft.Extensions.Caching.StackExchangeRedis;
 
 namespace Eshop.Basket.Api;
 
-public class Startup
+public sealed class Startup
 {
-    public Startup(IConfiguration configuration)
+    public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
     {
         _configuration = configuration;
-
-        _redisConnectionString = GetConnectionString("Redis");
         
+        _webHostEnvironment = webHostEnvironment;
+
         _postgreConnectionString = GetConnectionString("Eshop");
+
+        _redisConnectionString = GetConnectionString("EshopCache");
     }
 
     private readonly string _redisConnectionString;
@@ -26,6 +31,8 @@ public class Startup
     private readonly string _postgreConnectionString;
 
     private readonly IConfiguration _configuration;
+    
+    private readonly IWebHostEnvironment _webHostEnvironment;
 
     public void ConfigureServices(IServiceCollection services)
     {
@@ -39,6 +46,30 @@ public class Startup
         services.AddHealthChecks()
             .AddRedis(_redisConnectionString)
             .AddNpgSql(_postgreConnectionString);
+
+        var discountClientBuilder = services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(ConfigureDiscountServiceClient);
+
+        if (_webHostEnvironment.IsDevelopment())
+        {
+            discountClientBuilder.ConfigurePrimaryHttpMessageHandler(GetDevelopmentHttpClientHandler);
+        }
+    }
+
+    private void ConfigureDiscountServiceClient(GrpcClientFactoryOptions options)
+    {
+        var uriString = _configuration.GetValue<string>("GrpcSettings:DiscountUri");
+
+        ArgumentNullException.ThrowIfNull(uriString);
+
+        options.Address = new(uriString);
+    }
+
+    private static HttpClientHandler GetDevelopmentHttpClientHandler()
+    {
+        return new HttpClientHandler()
+        {
+            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+        };
     }
 
     private void ConfigureMarten(StoreOptions storeOptions)
@@ -86,10 +117,7 @@ public class Startup
     {
         var connectionString = _configuration.GetConnectionString(connectionStringKey);
 
-        if (connectionString is null)
-        {
-            throw new NotSupportedException(nameof(connectionString));
-        }
+        ArgumentNullException.ThrowIfNull(connectionString);
 
         return connectionString;
     }

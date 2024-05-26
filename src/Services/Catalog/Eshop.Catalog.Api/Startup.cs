@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 namespace Eshop.Catalog.Api;
 
-public class Startup
+public sealed class Startup
 {
     public Startup(
         IConfiguration configuration

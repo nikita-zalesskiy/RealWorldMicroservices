@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package Messages;
+
+option csharp_namespace = "Eshop.Discount.Grpc";
+
+message CouponDto
+{
+	int32 coupon_id = 1;
+	string product_id = 2;
+	string amount = 3;
+}
+
+message GetDiscountRequest
+{
+	string product_id = 1;
+}
+
+message GetDiscountResponse
+{
+	CouponDto coupon = 1;
+}
+
+message CreateDiscountRequest
+{
+	CouponDto coupon = 1;
+}
+
+message CreateDiscountResponse
+{
+	int32 coupon_id = 1;
+}
+
+message UpdateDiscountRequest
+{
+	CouponDto coupon = 1;
+}
+
+message UpdateDiscountResponse
+{
+	bool is_succeeded = 1;
+}
+
+message DeleteDiscountRequest
+{
+	string product_id = 1;
+}
+
+message DeleteDiscountResponse
+{
+	bool is_succeeded = 1;
+}
